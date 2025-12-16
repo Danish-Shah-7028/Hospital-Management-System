@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}AI Doctor Advice{% endblock %}
+{% block content %}
+<style>
+  .ai-wrapper {
+    max-width: 700px;
+    margin: 32px auto;
+    background:#ffffff;
+    border-radius:14px;
+    box-shadow:0 4px 18px rgba(31,125,180,0.08);
+    padding:22px 24px 26px;
+    font-family:'Segoe UI','Arial',sans-serif;
+    color:#234e36;
+  }
+  .ai-title {
+    font-size:1.4rem;
+    font-weight:600;
+    color:#186943;
+    margin-bottom:10px;
+  }
+  .form-group { margin-bottom:12px; }
+  .form-group label {
+    display:block;
+    margin-bottom:4px;
+    font-size:0.95rem;
+  }
+  .form-group select,
+  .form-group textarea {
+    width:100%;
+    padding:8px 10px;
+    border-radius:8px;
+    border:1px solid #cfe7dd;
+    font-size:0.95rem;
+  }
+  .btn-primary {
+    padding:8px 14px;
+    border-radius:8px;
+    border:none;
+    font-size:0.92rem;
+    cursor:pointer;
+    background:#1f6fb2;
+    color:#fff;
+  }
+  .rec-card {
+    margin-top:16px;
+    padding:10px 12px;
+    border-radius:10px;
+    background:#f3faf6;
+    border:1px solid #cfe7dd;
+  }
+  .rec-name {
+    font-weight:600;
+    margin-bottom:2px;
+  }
+  .rec-meta {
+    font-size:0.9rem;
+    color:#4a6672;
+  }
+  .rec-score {
+    font-size:0.8rem;
+    color:#718096;
+    margin-top:4px;
+  }
+</style>
+
+<div class="ai-wrapper">
+  <div class="ai-title">AI Advice: Choose a Doctor</div>
+
+  <form method="POST" action="{{ url_for('patient_ai_advice') }}">
+    <div class="form-group">
+      <label for="dept_id">Department</label>
+      <select id="dept_id" name="dept_id" required>
+        <option value="">Select department</option>
+        {% for d in departments %}
+        <option value="{{ d.dept_id }}"
+                {% if selected_dept and selected_dept.dept_id == d.dept_id %}selected{% endif %}>
+          {{ d.dept_name }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="needs">Describe your problem / preference</label>
+      <textarea id="needs" name="needs" rows="3"
+                placeholder="Reason for treatment...">{{ patient_text }}</textarea>
+    </div>
+
+    <button type="submit" class="btn-primary">Get AI Advice</button>
+  </form>
+
+  {% if recommended_doctors %}
+    <div style="margin-top:18px; font-weight:600; color:#186943;">
+      Recommended doctors:
+    </div>
+    {% for d, score in recommended_doctors %}
+      <div class="rec-card">
+        <div class="rec-name">Dr. {{ d.username }}</div>
+        <div class="rec-meta">
+          {% if d.qualifications %}{{ d.qualifications }}{% endif %}
+          {% if d.experience %} • {{ d.experience }} years experience{% endif %}
+        </div>
+        {% if d.description %}
+        <div class="rec-meta">{{ d.description }}</div>
+        {% endif %}
+        <div class="rec-score">Match score: {{ '%.2f' % (score * 100) }}%</div>
+      </div>
+    {% else %}
+      <div style="margin-top:12px;">No doctors found for this department.</div>
+    {% endfor %}
+  {% endif %}
+</div>
+{% endblock %}

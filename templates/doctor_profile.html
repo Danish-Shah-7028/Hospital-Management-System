@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Doctor Profile{% endblock %}
+{% block content %}
+<style>
+  .doc-prof-wrapper {
+    max-width: 520px;
+    margin: 32px auto;
+    background:#ffffff;
+    border-radius:14px;
+    box-shadow:0 4px 18px rgba(31,125,180,0.08);
+    padding:22px 24px 26px;
+    font-family:'Segoe UI','Arial',sans-serif;
+    color:#234e36;
+  }
+  .doc-prof-title {
+    font-size:1.4rem;
+    font-weight:600;
+    color:#186943;
+    margin-bottom:6px;
+  }
+  .doc-prof-sub {
+    font-size:0.9rem;
+    color:#4a6672;
+    margin-bottom:12px;
+  }
+  .doc-prof-field {
+    margin-bottom:8px;
+    font-size:0.95rem;
+  }
+  .doc-prof-label {
+    font-weight:600;
+  }
+  .doc-prof-desc {
+    margin-top:10px;
+    font-size:0.95rem;
+    line-height:1.4;
+  }
+  .doc-prof-actions {
+    margin-top:16px;
+    text-align:right;
+  }
+  .btn-secondary {
+    background:#a0aec0;
+    color:#fff;
+    padding:8px 14px;
+    border-radius:8px;
+    border:none;
+    font-size:0.9rem;
+    cursor:pointer;
+    text-decoration:none;
+  }
+</style>
+
+<div class="doc-prof-wrapper">
+  <div class="doc-prof-title">{{ doctor.username }}</div>
+  <div class="doc-prof-sub">
+    {% if doctor.department %}{{ doctor.department.dept_name }}{% endif %}
+  </div>
+
+  <div class="doc-prof-field">
+    <span class="doc-prof-label">Qualification:</span>
+    {{ doctor.qualifications or 'Not specified' }}
+  </div>
+
+  <div class="doc-prof-field">
+    <span class="doc-prof-label">Experience:</span>
+    {% if doctor.experience %}
+      {{ doctor.experience }} years
+    {% else %}
+      Not specified
+    {% endif %}
+  </div>
+
+  <div class="doc-prof-desc">
+    <span class="doc-prof-label">About doctor:</span><br>
+    {{ doctor.description or 'No description available.' }}
+  </div>
+
+  <div class="doc-prof-actions">
+    <a href="{{ request.referrer or url_for('patient_dashboard') }}"
+       class="btn-secondary">Back</a>
+  </div>
+</div>
+{% endblock %}

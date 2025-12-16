@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% block title %}Patient Dashboard{% endblock %}
+{% block content %}
+<style>
+  body {
+    background: linear-gradient(120deg, #f0fff4 0%, #e9f7fd 100%);
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    color: #234e36;
+    margin: 0;
+    padding: 0;
+  }
+  .pd-container {
+    max-width: 1400px;
+    margin: 30px auto 40px;
+    padding: 0 20px;
+  }
+  .pd-card {
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(31, 125, 180, 0.08);
+    padding: 28px 32px 32px;
+    font-size: 1rem;
+  }
+  .pd-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 1.3rem;
+  }
+  .pd-header-row small a {
+    margin-left: 10px;
+    font-weight: 400;
+    color: #1f6fb2;
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  .pd-header-row small a:hover {
+    text-decoration: underline;
+  }
+  .pd-section-title {
+    font-weight: 600;
+    margin: 18px 0 12px;
+    color: #186943;
+    font-size: 1.15rem;
+  }
+  .pd-pill-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .pd-pill-row input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #cfe7dd;
+    background: #f4faf7;
+    margin-right: 12px;
+    font-size: 0.98rem;
+  }
+
+  .pd-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .pd-btn-outline {
+    background: #ffffff;
+    color: #1f6fb2;
+    border: 1px solid #1f6fb2;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .pd-btn-outline:hover {
+    background: #e5f1fb;
+  }
+  .pd-btn-danger-outline {
+    background: #fff;
+    color: #d7263d;
+    border: 1px solid #d7263d;
+  }
+  .pd-btn-danger-outline:hover {
+    background: #ffe5ea;
+  }
+
+  .pd-btn-book {
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-weight: 500;
+    background: #1f6fb2;
+    color: #ffffff;
+    border: 1px solid #1f6fb2;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(31, 111, 178, 0.35);
+    font-size: 0.98rem;
+  }
+  .pd-btn-book:hover {
+    background: #18548a;
+  }
+
+  .pd-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.98rem;
+  }
+  .pd-table th,
+  .pd-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #e1eee7;
+    text-align: left;
+  }
+  .pd-table th {
+    background: #e3f6ef;
+    color: #145b3d;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  .pd-table td {
+    font-size: 0.95rem;
+  }
+
+  .pd-ai-link {
+    display:inline-block;
+    margin-top:6px;
+    font-size:0.9rem;
+    color:#1f6fb2;
+    text-decoration:none;
+  }
+  .pd-ai-link:hover {
+    text-decoration:underline;
+  }
+</style>
+
+<div class="pd-container">
+  <div class="pd-card">
+    <div class="pd-header-row">
+      <div>Welcome {{ session.get('name') or 'Patient' }}</div>
+      <small>
+        <a href="{{ url_for('patient_profile') }}">Edit Profile</a>
+      </small>
+    </div>
+
+    <div>
+      <div class="pd-section-title">Departments</div>
+
+      {% for dept in departments %}
+      <div class="pd-pill-row">
+        <input type="text" value="{{ dept.dept_name }}" readonly>
+        <a href="{{ url_for('department_detail', dept_id=dept.dept_id) }}"
+           class="pd-btn pd-btn-outline">View Details</a>
+      </div>
+      {% endfor %}
+
+      <!-- AI advice link -->
+      <a href="{{ url_for('patient_ai_advice') }}" class="pd-ai-link">
+        Ask AI: Which doctor is best for me?
+      </a>
+    </div>
+
+    <div style="margin-top:24px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div class="pd-section-title" style="margin:0;">Upcoming Appointments</div>
+        <a href="{{ url_for('book_appointment_step1') }}" class="pd-btn pd-btn-book">Book Appointment</a>
+      </div>
+
+      <table class="pd-table">
+        <tr>
+          <th>Sr. No.</th>
+          <th>Doctor Name</th>
+          <th>Dept</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th></th>
+        </tr>
+        {% for appt in appointments %}
+        <tr>
+          <td>{{ appt.id }}</td>
+          <td>{{ appt.doctor.username if appt.doctor else 'N/A' }}</td>
+          <td>{{ appt.treatment.department.dept_name if appt.treatment and appt.treatment.department else 'N/A' }}</td>
+          <td>{{ appt.date or 'N/A' }}</td>
+          <td>{{ appt.time or 'N/A' }}</td>
+          <td>
+            <form method="POST" action="{{ url_for('cancel_appointment', appt_id=appt.id) }}">
+              <button class="pd-btn pd-btn-danger-outline" type="submit">Cancel</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="6">No appointments yet.</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Hospital Management System{% endblock %}</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: linear-gradient(to bottom right, #1e3c72, #2a5298);
+        }
+
+        header {
+            background: #0a2a43;
+            padding: 15px 25px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        header .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        header .nav-links a {
+            text-decoration: none;
+            color: white;
+            margin-left: 25px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        header .nav-links a:hover {
+            color: #ffcdcd;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 20px;
+        }
+
+        footer {
+            background: #0a2a43;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            margin-top: auto;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            header .nav-links {
+                margin-top: 10px;
+            }
+
+            header .nav-links a {
+                margin: 0 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">Hospital Management System</div>
+        <div class="nav-links">
+            {% if not session.get('name') %}
+              <a href="{{ url_for('registration') }}">Signup</a>
+              <a href="{{ url_for('login') }}">Login</a>
+
+            {% elif session.get('role') == "patient" %}
+              {% if not hide_history_link %}
+                <a href="{{ url_for('patient_history') }}">History</a>
+              {% endif %}
+              <a href="{{ url_for('logout') }}">Logout</a>
+
+            {% elif session.get('role') == "admin" %}
+              <a href="{{ url_for('logout') }}">Logout</a>
+            
+            {% elif session.get('role') == "doctor" %}
+              <a href="{{ url_for('logout') }}">Logout</a>
+            {% endif %}
+        </div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div id="flash-container" style="max-width: 600px; margin: 16px auto;">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}"
+                 style="background:#ffe5e5; color:#b00020; padding:8px 12px; border-radius:6px; margin-bottom:6px;">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+        <script>
+        setTimeout(function () {
+            var fc = document.getElementById('flash-container');
+            if (fc) {
+            fc.style.display = 'none';
+            }
+        }, 10000);
+      </script>
+    {% endif %}
+    {% endwith %}
+
+    {% block content %}
+    {% endblock %}
+
+    <footer>
+        &copy; Care Well Hospital | All Rights Reserved
+    </footer>
+</body>
+</html>

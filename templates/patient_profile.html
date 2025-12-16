@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile{% endblock %}
+{% block content %}
+<style>
+  .profile-wrapper {
+    max-width: 480px;
+    margin: 32px auto;
+    background:#ffffff;
+    border-radius:14px;
+    box-shadow:0 4px 18px rgba(31,125,180,0.08);
+    padding:22px 24px 26px;
+    font-family:'Segoe UI','Arial',sans-serif;
+    color:#234e36;
+  }
+  .profile-title {
+    font-size:1.4rem;
+    font-weight:600;
+    color:#186943;
+    margin-bottom:14px;
+  }
+  .form-group {
+    margin-bottom:12px;
+  }
+  .form-group label {
+    display:block;
+    margin-bottom:4px;
+    font-size:0.95rem;
+  }
+  .form-group input {
+    width:100%;
+    padding:8px 10px;
+    border-radius:8px;
+    border:1px solid #cfe7dd;
+    font-size:0.95rem;
+  }
+  .form-actions {
+    margin-top:16px;
+    text-align:right;
+  }
+  .btn {
+    padding:8px 14px;
+    border-radius:8px;
+    border:none;
+    font-size:0.92rem;
+    cursor:pointer;
+  }
+  .btn-primary {
+    background:#1f6fb2;
+    color:#fff;
+  }
+  .btn-secondary {
+    background:#a0aec0;
+    color:#fff;
+    margin-right:6px;
+  }
+</style>
+
+<div class="profile-wrapper">
+  <div class="profile-title">Edit Profile</div>
+
+  <form method="POST" action="{{ url_for('patient_profile') }}">
+    <div class="form-group">
+      <label for="username">Full Name</label>
+      <input id="username" name="username" type="text"
+             value="{{ user.username }}" required>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email ID</label>
+      <input id="email" name="email" type="email"
+             value="{{ user.email }}" required>
+    </div>
+
+    <div class="form-group">
+      <label for="password">New Password (leave blank to keep same)</label>
+      <input id="password" name="password" type="password">
+    </div>
+
+    <div class="form-actions">
+      <a href="{{ url_for('patient_dashboard') }}" class="btn btn-secondary">Cancel</a>
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

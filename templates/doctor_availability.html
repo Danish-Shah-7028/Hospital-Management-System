@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Provide Availability{% endblock %}
+{% block content %}
+<style>
+  .avail-wrapper {
+    max-width: 520px;
+    margin: 40px auto;
+    background:#ffffff;
+    border-radius:14px;
+    box-shadow:0 4px 18px rgba(31,125,180,0.08);
+    padding:22px 24px 26px;
+    font-family:'Segoe UI','Arial',sans-serif;
+    color:#234e36;
+  }
+  .avail-title {
+    font-size:1.3rem;
+    font-weight:600;
+    color:#186943;
+    margin-bottom:14px;
+  }
+  .avail-row {
+    display:flex;
+    gap:10px;
+    align-items:center;
+    margin-bottom:12px;
+  }
+  .avail-row label {
+    font-size:0.94rem;
+  }
+  .avail-row input {
+    padding:6px 10px;
+    border-radius:8px;
+    border:1px solid #cfe7dd;
+    font-size:0.94rem;
+  }
+  .avail-actions {
+    text-align:right;
+    margin-top:10px;
+  }
+  .btn {
+    padding:8px 14px;
+    border-radius:8px;
+    border:none;
+    font-size:0.9rem;
+    cursor:pointer;
+  }
+  .btn-primary {
+    background:#1f6fb2;
+    color:#fff;
+  }
+  .avail-list-title {
+    margin-top:16px;
+    font-weight:600;
+    color:#186943;
+    font-size:0.98rem;
+  }
+  .avail-item {
+    font-size:0.9rem;
+    padding:4px 0;
+    border-bottom:1px solid #e1eee7;
+  }
+</style>
+
+<div class="avail-wrapper">
+  <div class="avail-title">Provide Availability</div>
+
+  <form method="POST" action="{{ url_for('doctor_availability') }}">
+    <div class="avail-row">
+      <label for="date">Date</label>
+      <input type="date" id="date" name="date" required>
+    </div>
+    <div class="avail-row">
+      <label for="start_time">From</label>
+      <input type="time" id="start_time" name="start_time" required>
+      <label for="end_time">To</label>
+      <input type="time" id="end_time" name="end_time" required>
+    </div>
+
+    <div class="avail-actions">
+      <button type="submit" class="btn btn-primary">Save Availability</button>
+    </div>
+  </form>
+
+  {% if availabilities %}
+    <div class="avail-list-title">Your availability:</div>
+    {% for a in availabilities %}
+      <div class="avail-item">
+        {{ a.date }} &nbsp; {{ a.start_time }} – {{ a.end_time }}
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
+{% endblock %}

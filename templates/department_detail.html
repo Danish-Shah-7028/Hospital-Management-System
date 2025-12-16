@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}{{ department.dept_name }}{% endblock %}
+{% block content %}
+<style>
+  .dept-wrapper {
+    max-width: 900px;
+    margin: 32px auto;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(31,125,180,0.08);
+    padding: 24px 28px 28px;
+    font-family: 'Segoe UI','Arial',sans-serif;
+    color: #234e36;
+  }
+  .dept-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #186943;
+    margin-bottom: 10px;
+  }
+  .dept-desc {
+    font-size: 0.98rem;
+    color: #4a6672;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+  .doc-list-title {
+    font-weight: 600;
+    margin: 10px 0 6px;
+    color: #186943;
+  }
+  .doc-item {
+    padding: 6px 0;
+    border-bottom: 1px solid #e1eee7;
+    font-size: 0.95rem;
+  }
+  .dept-back a {
+    text-decoration: none;
+    color: #1f6fb2;
+    font-size: 0.9rem;
+  }
+  .dept-back a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="dept-wrapper">
+  <div class="dept-title">{{ department.dept_name }}</div>
+
+  <p class="dept-desc">
+    {{ department.description or "No description available for this department yet." }}
+  </p>
+
+  <div class="doc-list">
+    <div class="doc-list-title">Doctors in this department</div>
+    {% if doctors %}
+      {% for d in doctors %}
+        <div class="doc-item">
+          {{ d.username }}
+          {% if d.qualifications %} – {{ d.qualifications }}{% endif %}
+          {% if d.experience %} ({{ d.experience }} years experience){% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="doc-item">No doctors have been added to this department yet.</div>
+    {% endif %}
+  </div>
+
+  <div class="dept-back" style="margin-top:14px;">
+    <a href="{{ url_for('patient_dashboard') }}">&larr; Back to dashboard</a>
+  </div>
+</div>
+{% endblock %}

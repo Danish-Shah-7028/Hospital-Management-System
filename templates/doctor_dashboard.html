@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}Doctor Dashboard{% endblock %}
+{% block content %}
+<style>
+  .doc-container {
+    max-width: 1100px;
+    margin: 30px auto 40px;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(31,125,180,0.08);
+    padding: 24px 28px 28px;
+    font-family: 'Segoe UI','Arial',sans-serif;
+    color: #234e36;
+  }
+  .doc-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+    font-size:1.1rem;
+    font-weight:600;
+  }
+  .doc-header a {
+    font-size:0.9rem;
+    text-decoration:none;
+    color:#1f6fb2;
+  }
+  .section-title {
+    font-weight:600;
+    margin:16px 0 8px;
+    color:#186943;
+    font-size:1.05rem;
+  }
+  .table {
+    width:100%;
+    border-collapse:collapse;
+    font-size:0.95rem;
+    margin-bottom:16px;
+  }
+  .table th, .table td {
+    padding:10px 12px;
+    border-bottom:1px solid #e1eee7;
+    text-align:left;
+  }
+  .table th {
+    background:#e3f6ef;
+    color:#145b3d;
+    font-weight:600;
+  }
+  .btn {
+    padding:6px 12px;
+    border-radius:8px;
+    border:none;
+    font-size:0.85rem;
+    cursor:pointer;
+  }
+  .btn-blue {
+    background:#1f6fb2;
+    color:#fff;
+  }
+  .btn-green {
+    background:#21a179;
+    color:#fff;
+  }
+  .btn-red {
+    background:#f56565;
+    color:#fff;
+  }
+  .btn-outline {
+    background:#fff;
+    border:1px solid #1f6fb2;
+    color:#1f6fb2;
+  }
+  .btn-link {
+    text-decoration:none;
+    display:inline-block;
+  }
+  .avail-box {
+    text-align:right;
+    margin-top:8px;
+  }
+</style>
+
+<div class="doc-container">
+  <div class="doc-header">
+    <div>Welcome Dr. {{ session.get('name') }}</div>
+  </div>
+
+  <div>
+    <div class="section-title">Upcoming Appointments</div>
+    <table class="table">
+      <tr>
+        <th>Sr No.</th>
+        <th>Patient Name</th>
+        <th>Patient History</th>
+        <th>Actions</th>
+      </tr>
+      {% for appt in upcoming_appointments %}
+      <tr>
+        <td>{{ appt.id }}</td>
+        <td>{{ appt.patient.username if appt.patient else 'N/A' }}</td>
+        <td>
+           <a href="{{ url_for('edit_appointment', appt_id=appt.id) }}" class="btn btn-blue btn-link">Update</a>
+        </td>
+        <td>
+            <form method="POST" action="{{ url_for('mark_appointment_complete', appt_id=appt.id) }}" style="display:inline;">
+               <button class="btn btn-green" type="submit">Mark as complete</button>
+            </form>
+
+            <form method="POST" action="{{ url_for('doctor_cancel_appointment', appt_id=appt.id) }}" style="display:inline;">
+               <button class="btn btn-red" type="submit">Cancel</button>
+            </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="4">No upcoming appointments.</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+    <div>
+    <div class="section-title">Assigned Patients</div>
+    <table class="table">
+      <tr>
+        <th>Patient Name</th>
+        <th></th>
+      </tr>
+      {% for p in assigned_patients %}
+      <tr>
+        <td>{{ p.username }}</td>
+        <td>
+          <a href="{{ url_for('doctor_patient_history', patient_id=p.user_id) }}"
+             class="btn btn-outline btn-link">View</a>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="2">No patients assigned yet.</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <div class="avail-box">
+      <a href="{{ url_for('doctor_availability') }}" class="btn btn-green" >Provide Availability</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

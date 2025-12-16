@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Your History{% endblock %}
+{% block content %}
+<style>
+  .hist-wrapper {
+    max-width: 900px;
+    margin: 30px auto;
+    background:#ffffff;
+    border-radius:14px;
+    box-shadow:0 4px 18px rgba(31,125,180,0.08);
+    padding:20px 24px 24px;
+    font-family:'Segoe UI','Arial',sans-serif;
+    color:#234e36;
+  }
+  .hist-title {
+    font-size:1.4rem;
+    font-weight:600;
+    color:#186943;
+    margin-bottom:12px;
+  }
+  .hist-table {
+    width:100%;
+    border-collapse:collapse;
+    font-size:0.95rem;
+  }
+  .hist-table th, .hist-table td {
+    padding:8px 10px;
+    border-bottom:1px solid #e1eee7;
+    text-align:left;
+  }
+  .hist-table th {
+    background:#e3f6ef;
+    color:#145b3d;
+    font-weight:600;
+  }
+</style>
+
+<div class="hist-wrapper">
+  <div class="hist-title">Appointment History</div>
+
+  <table class="hist-table">
+    <tr>
+      <th>Visit No.</th>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Doctor / Treatment</th>
+      <th>Status</th>
+    </tr>
+    {% for appt in appointments %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ appt.date }}</td>
+      <td>{{ appt.time }}</td>
+      <td>{{ appt.treatment.treat_name if appt.treatment else 'N/A' }}</td>
+      <td>{{ appt.status }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="5">No past appointments yet.</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

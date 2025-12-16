@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Book Appointment{% endblock %}
+{% block content %}
+<style>
+  .book-wrapper {
+    max-width: 520px;
+    margin: 32px auto;
+    background:#ffffff;
+    border-radius:14px;
+    box-shadow:0 4px 18px rgba(31,125,180,0.08);
+    padding:22px 24px 26px;
+    font-family:'Segoe UI','Arial',sans-serif;
+    color:#234e36;
+  }
+  .book-title {
+    font-size:1.4rem;
+    font-weight:600;
+    color:#186943;
+    margin-bottom:14px;
+  }
+  .form-group {
+    margin-bottom:12px;
+  }
+  .form-group label {
+    display:block;
+    margin-bottom:4px;
+    font-size:0.95rem;
+  }
+  .form-group select {
+    width:100%;
+    padding:8px 10px;
+    border-radius:8px;
+    border:1px solid #cfe7dd;
+    font-size:0.95rem;
+  }
+  .form-actions {
+    margin-top:16px;
+    text-align:right;
+  }
+  .btn {
+    padding:8px 14px;
+    border-radius:8px;
+    border:none;
+    font-size:0.92rem;
+    cursor:pointer;
+  }
+  .btn-primary {
+    background:#1f6fb2;
+    color:#fff;
+  }
+  .btn-secondary {
+    background:#a0aec0;
+    color:#fff;
+    margin-right:6px;
+  }
+</style>
+
+<div class="book-wrapper">
+  <div class="book-title">Book Appointment</div>
+
+  <form method="POST" action="{{ url_for('book_appointment_step1') }}">
+    <div class="form-group">
+      <label for="treatment_id">Treatment / Reason</label>
+      <select id="treatment_id" name="treatment_id" required>
+        <option value="">Select</option>
+        {% for t in treatments %}
+        <option value="{{ t.id }}">{{ t.treat_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <a href="{{ url_for('patient_dashboard') }}" class="btn btn-secondary">Cancel</a>
+      <button type="submit" class="btn btn-primary">Next</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

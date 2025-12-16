@@ -1,0 +1,58 @@
+# OS/system files
+.DS_Store
+Thumbs.db
+
+# IDE/Editor 
+.vscode/
+.idea/
+*.swp 
+*.swo
+
+# Environment files
+.env 
+.env.local 
+.env.* 
+
+# Logs 
+*.log 
+logs/ 
+npm-debug.log* 
+yarn-debug.log* 
+yarn-error.log* 
+
+# Dependencies 
+node_modules/
+venv/
+.env/
+__pycache__/ 
+*.py[cod]
+*.egg-info/
+*.egg 
+
+# Build/Output 
+dist/ 
+build/
+*.out 
+*.class 
+*.dll 
+*.exe 
+
+# Temporary files
+*.tmp 
+*.bak
+
+# Ignore Python cache files
+__pycache__/
+*.pyc 
+
+# Ignore virtual environment 
+venv/ 
+
+# Ignore environment variables file
+.env 
+
+# Ignore system/IDE files
+.DS_Store 
+*.log 
+.idea/ 
+.vscode/

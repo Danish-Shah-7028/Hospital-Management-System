@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Choose Doctor{% endblock %}
+{% block content %}
+<style>
+  .book-wrapper {
+    max-width: 720px;
+    margin: 32px auto;
+    background:#ffffff;
+    border-radius:14px;
+    box-shadow:0 4px 18px rgba(31,125,180,0.08);
+    padding:22px 24px 26px;
+    font-family:'Segoe UI','Arial',sans-serif;
+    color:#234e36;
+  }
+  .book-title {
+    font-size:1.4rem;
+    font-weight:600;
+    color:#186943;
+    margin-bottom:6px;
+  }
+  .book-subtitle {
+    font-size:0.9rem;
+    color:#4a6672;
+    margin-bottom:14px;
+  }
+  .doc-row {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 0;
+    border-bottom:1px solid #e1eee7;
+    font-size:0.95rem;
+  }
+  .doc-main {
+    max-width:60%;
+  }
+  .doc-name {
+    font-weight:600;
+    margin-bottom:2px;
+  }
+  .doc-meta {
+    font-size:0.85rem;
+    color:#4a6672;
+  }
+  .doc-actions {
+    text-align:right;
+  }
+  .btn {
+    padding:6px 12px;
+    border-radius:8px;
+    border:none;
+    font-size:0.85rem;
+    cursor:pointer;
+    margin-left:4px;
+  }
+  .btn-outline {
+    background:#fff;
+    border:1px solid #1f6fb2;
+    color:#1f6fb2;
+  }
+  .btn-primary {
+    background:#1f6fb2;
+    color:#fff;
+  }
+  .no-docs {
+    margin-top:10px;
+    font-size:0.9rem;
+    color:#c53030;
+  }
+  .form-actions {
+    margin-top:16px;
+    text-align:right;
+  }
+  .btn-secondary {
+    background:#a0aec0;
+    color:#fff;
+    padding:8px 14px;
+    border-radius:8px;
+    border:none;
+    font-size:0.9rem;
+    cursor:pointer;
+  }
+</style>
+
+<div class="book-wrapper">
+  <div class="book-title">Choose Doctor</div>
+  <div class="book-subtitle">
+    Treatment: <strong>{{ treatment.treat_name }}</strong>
+    {% if treatment.department %}
+      ({{ treatment.department.dept_name }})
+    {% endif %}<br>
+    Date: {{ sel_date }} &nbsp; Time: {{ sel_time }}
+  </div>
+
+  {% if doctors %}
+    {% for d in doctors %}
+      <div class="doc-row">
+        <div class="doc-main">
+          <div class="doc-name">{{ d.username }}</div>
+          <div class="doc-meta">
+            {% if d.qualifications %}{{ d.qualifications }}{% endif %}
+            {% if d.experience %} • {{ d.experience }} years experience{% endif %}
+          </div>
+        </div>
+        <div class="doc-actions">
+           <a href="{{ url_for('doctor_profile_public', doctor_id=d.user_id) }}" class="btn btn-outline">View details</a>
+
+           <form method="POST" action="{{ url_for('confirm_appointment') }}" style="display:inline;">
+            <input type="hidden" name="treatment_id" value="{{ treatment.id }}">
+            <input type="hidden" name="doctor_id" value="{{ d.user_id }}">
+            <input type="hidden" name="date" value="{{ sel_date }}">
+            <input type="hidden" name="time" value="{{ sel_time }}">
+            <button type="submit" class="btn btn-primary">Select</button>
+            </form>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="no-docs">
+      No doctors from this department are available at the selected time.
+    </div>
+  {% endif %}
+
+  <div class="form-actions">
+    <a href="{{ url_for('book_appointment_step2', treatment_id=treatment.id) }}"
+       class="btn-secondary">Back</a>
+  </div>
+</div>
+{% endblock %}

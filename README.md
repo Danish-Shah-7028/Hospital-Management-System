@@ -2,6 +2,8 @@
 
 Hospital Management System (HMS) is a Flask-based web application that enables admins, doctors, and patients to manage hospital operations including user management, appointment scheduling, and AI-powered doctor recommendations using NLP and TF-IDF techniques.
 
+**Try it out:** https://danishshah07.pythonanywhere.com/
+
 ## Table of Contents
 - [Features](#features)
 - [Technologies](#technologies)

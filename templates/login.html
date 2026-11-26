@@ -77,6 +77,32 @@
     .register-link:hover {
         text-decoration: underline;
     }
+
+    .demo-login {
+        margin-top: 18px;
+        padding: 12px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.2);
+        color: #f1faee;
+        font-size: 13px;
+        text-align: center;
+    }
+
+    .demo-login p {
+        margin: 4px 0;
+    }
+
+    .login-box .demo-btn {
+        background-color: transparent;
+        border: 1px solid #f1faee;
+        margin-top: 8px;
+        padding: 6px;
+        font-size: 13px;
+    }
+
+    .login-box .demo-btn:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+    }
 </style>
 
 {% if error_message %}
@@ -96,6 +122,19 @@
             <button type="submit">Login</button>
             <a class="register-link" href="{{ url_for('registration') }}">New here? Create an account</a>
         </form>
+
+        <div class="demo-login">
+            <p><strong>Want to try the admin side?</strong></p>
+            <p>Username: <b>admin</b> &nbsp;|&nbsp; Password: <b>admin4321</b></p>
+            <button type="button" class="demo-btn" onclick="fillAdminLogin()">Fill admin login</button>
+        </div>
     </div>
 </div>
+
+<script>
+    function fillAdminLogin() {
+        document.getElementById('fullname').value = 'admin';
+        document.getElementById('password').value = 'admin4321';
+    }
+</script>
 {% endblock %}
